@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+
+					<!-- Page Content -->
+					<div class="card">
+						<div class="card-header">Alterar | Estoque</div>
+						<div class="card-body">
+
+							<div class="tab-content" id="nav-tabContent">
+
+								<div class="table-responsive mt-3">
+									<table class="table table-hover table-bordered table-sm gridProdutos"
+										id="gridProdutos" style="width:100%">
+										<thead>
+											<tr>
+												<th>Descrição</th>
+												<th>Saldo Atual</th>
+												<th>Adicionar</th>
+												<th>Retirar</th>
+												<th>Ações</th>
+											</tr>
+										</thead>
+									</table>
+								</div class="table-responsive">
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+			<% include ../comum/footer %>
+		</div>
+		<!-- /.content-wrapper -->
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+			<!-- Bootstrap core JavaScript-->
+			<script src="/vendor/jquery/jquery.min.js"></script>
+			<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+			<!-- Core plugin JavaScript-->
+			<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+			<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+			<!-- Custom scripts for all pages-->
+			<script src="/js/sb-admin.min.js"></script>
+			<!-- Toastr -->
+			<script src="/toastr/toastr.min.js"></script>
+			<!-- Datatable -->
+			<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+			<script>
+				$(document).ready(() => {
+					// Definições do Toastr
+					toastr.options = {
+						"closeButton": true,
+						"newestOnTop": true,
+						"progressBar": true,
+						"positionClass": "toast-top-right"
+					}
+					$.fn.dataTable.ext.errMode = 'none';
+
+					var grid_produtos = $('#gridProdutos').DataTable({
+						"stateSave": false,
+						"searching": true,
+						"ordering": false,
+						"paging": true,
+						"info": true,
+						"autoWidth": true,
+						"language": {
+							"url": "/DataTables_Translate/Portuguese-Brasil.json"
+						},
+						"processing": false,
+						"serverSide": false,
+						"ajax": {
+							"dataType": 'json',
+							"contentType": "application/json; charset=UTF-8",
+							"url": "/listar/saldo/produtos",
+							"type": 'GET'
+						},
+						"columns": [{
+							"data": "DESCRICAO"
+						}, {
+							"data": "SALDO_ESTOQUE"
+						}, {
+							"data": "SALDO_ESTOQUE",
+							render: function (data, type, dataGeral) {
+								if (type === 'display') {
+									return '<input id="input_adicionar_' + dataGeral.ID_PRODUTO + '" type="number" class="form-control">';
+								}
+								return data
+							},
+							"width": "10%"
+						}, {
+							"data": "SALDO_ESTOQUE",
+							render: function (data, type, dataGeral) {
+								if (type === 'display') {
+									return '<input id="input_retirar_' + dataGeral.ID_PRODUTO + '" type="number" class="form-control">';
+								}
+								return data
+							},
+							"width": "10%"
+						}, {
+							"targets": -1,
+							"data": null,
+							"defaultContent": `<div class="col-sm-12" style='cursor:pointer' id='btnAlterarSaldo'>
+                                                <i class="far fa-edit fa-2x" style="color:#3399FF"></i>
+                                               </div>`
+						}]
+					});
+
+					$('#gridProdutos tbody').on('click', '#btnAlterarSaldo', function () {
+						var data = grid_produtos.row($(this).parents('tr')).data();
+
+						var produto = {};
+
+						let adicionarSaldo = $("#input_adicionar_" + data.ID_PRODUTO + "").val();
+						let subtrairSaldo = $("#input_retirar_" + data.ID_PRODUTO + "").val();
+
+						produto.id_produto = data.ID_PRODUTO;
+						produto.saldo_estoque = ((data.SALDO_ESTOQUE + Number(adicionarSaldo)) - Number(subtrairSaldo));
+
+						$.ajax({
+							url: "/alterar/estoque/produto",
+							type: 'patch',
+							data: produto,
+							dataType: "json",
+							beforeSend: (data) => {
+								$("body").addClass("loading");
+							}
+						})
+							.done((msg) => {
+								$("body").removeClass("loading");
+								if (msg.tipo == "success") {
+									grid_produtos.ajax.reload();
+									toastr.success(msg.message, "Sucesso");
+								} else {
+									toastr.warning(`Falha ao alterar o saldo do Produto.<br>` + msg.message, "Falha");
+								}
+							})
+							.fail((request, textStatus, errorThrown) => {
+								let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+								toastr.error("Erro.<br>" + msg, "Falha");
+							})
+							.always(() => {
+								$("body").removeClass("loading");
+							});
+					});
+				});
+			</script>
+			<div class="customLoading"></div>
+</body>
+
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Select2 -->
+	<link href="/public/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+                        <div class="col-sm-12">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Cabeçalho | Pedido
+                                </div>
+                                <div class="card-body">
+                                    <form>                                        
+                                        <div class="form-group row">
+                                            <label for="razao_social" class="col-sm-2 col-form-label">Nome Cliente: </label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" id="razao_social"
+                                                    placeholder="Nome Cliente" name="razao_social">
+                                            </div>
+                                            <label for="cnpj" class="col-sm-2 col-form-label">CPF/ CNPJ: </label>
+                                            <div class="col-sm-4">
+                                                <input type="number" class="form-control" id="cnpj"
+                                                    placeholder="CPF/ CNPJ" name="cnpj">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="search_produto" class="col-sm-2 col-form-label">Produto: </label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control js-example-basic-single" name="search_produto" id="search_produto">
+                                                    <option value="" selected>Selecione..</option>
+                                                    <%for(let x=0; x < recordsProdutos.length; x++){%>
+                                                        <option value="<%=recordsProdutos[x].ID_PRODUTO%>">
+                                                            <%=recordsProdutos[x].DESCRICAO%>
+                                                        </option>
+                                                    <%}%>
+                                                  </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row d-none">
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="pedido_id" name="pedido_id">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="usuario_id" name="usuario_id" value="<%=usuario_id%>">
+                                            </div>
+                                        </div>	
+                                        <div class="form-group row">
+                                            <label for="valor_produto" class="col-sm-2 col-form-label">Valor: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="valor_produto"
+                                                    placeholder="R$ 00,00" name="valor_produto">
+                                            </div>
+                                            <label for="saldo_estoque" class="col-sm-2 col-form-label">Saldo: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="saldo_estoque"
+                                                    placeholder="Saldo" name="saldo_estoque" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="embalagem_id" class="col-sm-2 col-form-label">Embalagem: </label>
+                                            <div class="col-sm-2">
+                                                <select class="custom-select my-1 mr-sm-2" id="embalagem_id" name="embalagem_id">
+                                                </select>
+                                            </div>
+                                            <label for="quantidade_produto" class="col-sm-2 col-form-label">Quantidade: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="quantidade_produto"
+                                                    placeholder="Quantidade" name="quantidade_produto">
+                                            </div>
+                                        </div>                                        
+                                        <button type="button" class="btn btn-primary" id="btn-add-item-carrinho">Adicionar <i class="fas fa-shopping-cart"></i></button>
+                                        
+                                        <button type="button" class="btn btn-primary float-right disabled" id="btn-fecha-pedido">Fechar Pedido <i class="fas fa-shopping-basket"></i></button>
+                           
+                                        <div id="dados_total" style="text-align: right;">Total Pedido: </div>
+                                    </form>
+                                </div class="card-body">
+                            </div class="card">
+        
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Itens | Pedido
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered table-sm gridProdutosCarrinho"
+                                        id="gridProdutosCarrinho" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Produto</th>
+                                                <th>Valor</th>
+                                                <th>Quantidade</th>
+                                                <th>Valor Tot. Item</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    </div class="table-responsive">
+                                </div class="card-body">
+                            </div class="card">
+        
+                        </div class="col-sm-12">
+                    </div class="row">
+				</div>
+                <!-- /.container-fluid -->
+			</div>
+		    <!-- /.content-wrapper -->
+			<% include ../comum/footer %>
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+		<!-- Bootstrap core JavaScript-->
+		<script src="/vendor/jquery/jquery.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="/js/sb-admin.min.js"></script>
+		<!-- Toastr -->
+		<script src="/toastr/toastr.min.js"></script>
+        <!-- Axios -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- Select2 -->
+		<script src="/public/select2/dist/js/select2.min.js"></script>
+		<!-- Datatable -->
+		<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+        <div id="recordsRascunho" class="d-none"><%=JSON.stringify(recordsRascunho)%></div>
+        <script>
+            $(document).ready(() => {
+                $('.js-example-basic-single').select2();
+                // Definições do Toastr
+				function toastrGeneric(messagem, title, type, closeButton, progressBar, timeOut, extendedTimeOut, tapToDismiss) {
+					toastr.options = {
+						"closeButton": closeButton,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": progressBar,
+						"positionClass": "toast-top-right",
+						"preventDuplicates": false,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": timeOut,
+						"extendedTimeOut": extendedTimeOut,
+						"tapToDismiss": tapToDismiss
+					}
+					switch (type) {
+						case 'success':
+							toastr.success(messagem, title)
+							break;
+						case 'error':
+							toastr.error(messagem, title)
+							break;
+						case 'warning':
+							toastr.warning(messagem, title)
+							break;
+						case 'confirm_excl':
+							toastr.warning(messagem, title)
+							break;
+						default:
+							toastr.success("Falha", "Erro")
+							break;
+					}
+				}
+                $.fn.dataTable.ext.errMode = 'none';
+
+                let pedidos = JSON.parse($('#recordsRascunho').html());
+
+                if(pedidos.length > 0){
+                    toastrGeneric(`Existe pedido em rascunho para o usuario logado, deseja carrega-lo em tela? 
+                    <br /><br /><button type="button" class="btn btn-primary" id="btn-load-rascunho">Sim</button> <label class="col-sm-2 col-form-label" ></label> <button type="button" class="btn btn-danger" id="btn-cancela-load-rascunho">Não</button>`,"Atenção", "confirm_excl", true, false, 0, 0, false);
+                }
+                
+                // 1º Confirmação de exclusão do rascunho.
+                $("#btn-cancela-load-rascunho").click((event) => {
+                    toastr.remove();
+                    toastrGeneric(`Rascunho pendente será excluido, confirma exclusão?
+                    <br /><br /><button type="button" class="btn btn-danger" id="btn-confirma-exclusao-rascunho">Sim</button> <label class="col-sm-2 col-form-label" ></label> `,"Atenção", "confirm_excl", true, false, 0, 0, false);
+                    
+                    // Exclui o rascunho.
+                    $("#btn-confirma-exclusao-rascunho").click((event) => {
+                        $.ajax({
+				    		url: "/excluir/rascunho/" + pedidos[0].ID_PEDIDO,
+				    		type: 'delete',
+				    		beforeSend: (data) => {
+				    			$("body").addClass("loading");
+				    		}
+				    	})
+				    	.done((msg) => {
+				    		$("body").removeClass("loading");
+				    		if (msg.tipo == "success") {
+                                toastr.remove();
+				    		} else {
+								toastrGeneric("Falha ao excluir o rascunho.<br>" + msg.message,"Atenção", "warning", false, true, 5000, 1000, false);
+				    		}
+				    	})
+				    	.fail((request, textStatus, errorThrown) => {
+                            let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+							toastrGeneric("Erro.<br>" + msg,"Falha", "error", false, true, 5000, 1000, false);
+
+				    	})
+				    	.always(() => {
+				    		$("body").removeClass("loading");
+				    	});
+                    })
+                });
+
+                // Carrega os dados do rascunho em tela.
+                $("#btn-load-rascunho").click((event) => {
+                    // Busca os itens vinculados ao pedido.
+                    grid_produtos_carrinho.ajax.url('/listar/itens/pedido/rascunho/' + pedidos[0].ID_PEDIDO).load();
+                    // Grava o sequencial do pedido em pedido_item.
+                    $("#pedido_id").val(pedidos[0].ID_PEDIDO);
+                    // Habilita o botão btn-fecha-pedido.
+                    $('#btn-fecha-pedido').removeClass('disabled');
+                    // Remove o toastr.
+                    toastr.remove();
+                })
+
+                var grid_produtos_carrinho = $('#gridProdutosCarrinho').DataTable({
+                    "stateSave": false,
+                    "searching": true,
+                    "ordering": false,
+                    "paging": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "language": {
+                        "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                    },
+                    "processing": false,
+                    "serverSide": false,
+                    "ajax": {
+                        "dataType": 'json',
+                        "contentType": "application/json; charset=UTF-8",
+                        "url": '/api/array_vazio',
+                        "type": 'GET'
+                    },
+                    "columns": [{
+                        "data": "DESCRICAO"
+                    }, {
+                        "data": "VALOR_UNITARIO"
+                    }, {
+                        "data": "QUANTIDADE"
+                    }, {
+                        "data": "VALOR_TOTAL"
+                    }, {
+                        "targets": -1,
+                        "data": null,
+                        "defaultContent": ` 
+                        <div class="row">
+                            <div class="col-sm-6" style='cursor:pointer' id='btnAlterarDadosProduto'>
+                                <i class="far fa-edit fa-1x" style="color:#3399FF"></i>
+                            </div>
+                            <div class="col-sm-6" style='cursor:pointer' id='btnExcluirProduto'>
+							<i class="fas fa-trash-alt fa-1x" style="color:#FF0000"></i>
+						    </div>
+                        </div>`
+                    }]
+                });
+
+                grid_produtos_carrinho.on('xhr', function (e, settings, json) {
+                    if (json) {                   
+                        let totalPedido = 0.0;
+
+                        for (let i = 0; i < json.data.length; i++) {
+                            totalPedido += parseFloat(json.data[i].VALOR_TOTAL);
+
+                        }
+                        totalPedido = totalPedido.toFixed(2);
+                        $("#valor_total").remove();
+                        $("#dados_total").append(`<a id="valor_total" style="color: green; font-weight: bold;" >` + totalPedido + `<a/>`);
+                    }
+                });
+
+                $("#search_produto").change((event) => {
+                    if ($("#search_produto").val()) {
+                            var queryEmbalagem = "";
+                            $("#embalagem_id").html("");
+                    
+							// Busca os dados do produto selecionado e preenche os campos do tipo input e select.
+							$.ajax({
+								url: "/busca/dados/produto/" + $("#search_produto").val(),
+								type: 'get',
+								dataType: "json"
+							})
+								.done((msg) => {
+									if (msg && msg.tipo == 'success') {
+                                        // Preenche os inputs dos dados do produto
+                                        $("#valor_produto").val(msg.dataProduto.valor);
+                                        $("#saldo_estoque").val(msg.dataProduto.saldo);
+                                    
+                                        // Popula select das embalagens
+										for (let i = 0; i < msg.dataEmbalagem.length; i++) {
+                                            queryEmbalagem += `<option value="${msg.dataEmbalagem[i].id+'|'+msg.dataEmbalagem[i].quantidade}">
+												${msg.dataEmbalagem[i].sigla}
+											 </option>`;
+										}
+                                    
+                                        $("#embalagem_id").append(queryEmbalagem);
+									}
+								})
+								.fail((request, textStatus, errorThrown) => {
+                                    let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+                                    toastrGeneric("Erro.<br>" + msg,"Falha", "error", false, true, 5000, 1000, false);
+								})
+								.always(() => {
+									$("body").removeClass("loading");
+								});
+						}
+                });
+
+                $("#btn-add-item-carrinho").click((event) => {
+                    if($("#quantidade_produto").val() && $('#search_produto').val() && $('#embalagem_id').val() && $("#valor_produto").val()){
+                        var dados_embalagem = $('#embalagem_id').val().split('|');
+
+                        var params = {
+                            "produto_id": $("#search_produto").val(),
+                            "qtde_produto": Number($("#quantidade_produto").val()),
+                            "valor_produto": Number($("#valor_produto").val()),
+                            "embalagem_id": dados_embalagem[0],
+                            "pedido_id": $('#pedido_id').val(),
+                            "usuario_id": $('#usuario_id').val(),
+                            "rascunho": 'S',
+                            "quatidade_embalagem": dados_embalagem[1]
+                        }
+
+                        $.ajax({
+                            url: "/cadastrar/pedido/item",
+                            type: 'post',
+                            data: params,
+                            dataType: "json",
+                            beforeSend: (data) => {
+                                $("body").addClass("loading");
+                            }
+                        })
+                            .done((msg) => {
+                                $("body").removeClass("loading");
+                                if (msg.tipo == "success") {
+                                    // URL responsavel pela atualização do datatables.
+                                    url = '/listar/itens/pedido/rascunho/' + msg.pedido_id;
+                                    // Insere o numero de pedido vinculado ao item adicionado.
+                                    $("#pedido_id").val(msg.pedido_id);
+                                    // Chama a api que busca os itens gravado no rascunho e atualiza o datatables.
+                                    grid_produtos_carrinho.ajax.url(url).load();
+                                    // Habilita o botão btn-fecha-pedido.
+                                    $('#btn-fecha-pedido').removeClass('disabled');
+                                    toastrGeneric(msg.message,"Sucesso", "success", false, true, 5000, 1000, false);
+                                } else {
+                                    toastrGeneric('Falha ao add produto no carrinho.<br>' + msg.message,"Atenção", "warning", false, true, 5000, 1000, false);
+                                }
+                            })
+                            .fail((request, textStatus, errorThrown) => {
+                                let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+								toastrGeneric("Erro.<br>" + msg,"Falha", "error", false, true, 5000, 1000, false);
+
+                            })
+                            .always(() => {
+                                $("body").removeClass("loading");
+                            });
+
+                    } else {
+						toastrGeneric("Selecione o produto e/ou quantidade.<br>","Falha", "error", false, true, 5000, 1000, false);
+                    }
+                })
+
+                $("#btn-fecha-pedido").click((event) => {
+                    var params = {
+                            "razao_social": $("#razao_social").val(),
+                            "cnpj": $("#cnpj").val(),
+                            "id_pedido": $('#pedido_id').val(),
+                            "usuario_id": $('#usuario_id').val(),
+                            "valor_total": $('#valor_total').html(),
+                            "rascunho": 'N'
+                        }
+
+                        $.ajax({
+                            url: "/cadastrar/pedido",
+                            type: 'post',
+                            data: params,
+                            dataType: "json",
+                            beforeSend: (data) => {
+                                $("body").addClass("loading");
+                            }
+                        })
+                            .done((msg) => {
+                                $("body").removeClass("loading");
+                                if (msg.tipo == "success") {
+                                    window.location.href = "/";
+                                } else {
+									toastrGeneric("Falha ao fechar pedido.<br>" + msg.message,"Atenção", "warning", false, true, 5000, 1000, false);
+                                }
+                            })
+                            .fail((request, textStatus, errorThrown) => {
+                                let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+								toastrGeneric("Erro.<br>" + msg,"Falha", "error", false, true, 5000, 1000, false);
+                            })
+                            .always(() => {
+                                $("body").removeClass("loading");
+                            });
+                    
+                })
+            });
+        </script>
+		<div class="customLoading"></div>
+</body>
+
+</html>

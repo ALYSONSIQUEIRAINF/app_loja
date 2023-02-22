@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<!-- Page Content -->
+					<div class="card">
+						<div class="card-header">Cadastrar | Cliente</div>
+						<div class="card-body">
+
+							<div class="tab-content" id="nav-tabContent">
+
+								<form method="POST" action="/cadastrar/cliente">
+									<div class="form-group row">
+										<label for="razao_social" class="col-sm-2 col-form-label">Razão Social: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="razao_social"
+												placeholder="Razão Social" name="razao_social" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="cnpj" class="col-sm-2 col-form-label">CNPJ: </label>
+										<div class="col-sm-10">
+											<input type="number" class="form-control" id="cnpj"
+												placeholder="CNPJ" name="cnpj" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="endereco" class="col-sm-2 col-form-label">Endereço: </label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" id="endereco"
+												placeholder="Endereço" name="endereco" required>
+										</div>
+										<label for="numero_residencia" class="col-sm-1 col-form-label">N° </label>
+										<div class="col-sm-2">
+											<input type="text" class="form-control" id="numero_residencia" 
+                                            placeholder="Número Residencial" name="numero_residencia" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="bairro" class="col-sm-2 col-form-label">Bairro: </label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="bairro" 
+                                            placeholder="Bairro" name="bairro" required>
+										</div>
+										<label for="cidade" class="col-sm-2 col-form-label">Cidade: </label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="cidade" 
+                                            placeholder="Cidade" name="cidade" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="estado" class="col-sm-2 col-form-label">UF: </label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="estado" 
+                                            placeholder="Estado" name="estado" required>
+										</div>
+										<label for="cep" class="col-sm-2 col-form-label">CEP: </label>
+										<div class="col-sm-4">
+											<input type="number" class="form-control" id="cep" 
+                                            placeholder="CEP" name="cep" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="telefone_contato1" class="col-sm-2 col-form-label">Telefone 1: </label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="telefone_contato1" 
+                                            placeholder="Telefone Contato 1" name="telefone_contato1" required>
+										</div>
+										<label for="telefone_contato2" class="col-sm-2 col-form-label">Telefone 2: </label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="telefone_contato2" 
+                                            placeholder="Telefone Contato 2" name="telefone_contato2">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="conta" class="col-sm-2 col-form-label">Conta: </label>
+										<div class="col-sm-2">
+											<input type="text" class="form-control" id="conta" 
+                                            placeholder="Conta Acesso" name="conta" required>
+										</div>
+										<label for="connection" class="col-sm-2 col-form-label">Conexão: </label>
+										<div class="col-sm-2">
+											<input type="text" class="form-control" id="connection" 
+                                            placeholder="Conexão BD" name="connection" required>
+										</div>
+										<label for="situacao" class="col-sm-2 col-form-label">Situação:</label>
+										<div class="col-sm-2">
+												<select class="custom-select my-1 mr-sm-2" id="situacao" name="situacao" required>
+													<option value="" selected>Selecione...</option>
+													<option value="A">Ativo</option>
+													<option value="I">Inativo</option>
+												</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="reserva_estoque" class="col-sm-2 col-form-label">Reserva Estoque:</label>
+										<div class="col-sm-2">
+											<select class="custom-select my-1 mr-sm-2" id="reserva_estoque" name="reserva_estoque" required>
+												<option value="" selected>Selecione...</option>
+												<option value="S">SIM</option>
+												<option value="N">NÃO</option>
+											</select>
+										</div>	
+									</div>
+									<button class="btn btn-primary" type="submit">Salvar</button>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+
+			<% include ../comum/footer %>
+		</div>
+		<!-- /.content-wrapper -->
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+			<!-- Bootstrap core JavaScript-->
+			<script src="/vendor/jquery/jquery.min.js"></script>
+			<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+			<!-- Core plugin JavaScript-->
+			<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+			<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+			<!-- Custom scripts for all pages-->
+			<script src="/js/sb-admin.min.js"></script>
+			<!-- Toastr -->
+			<script src="/../toastr/toastr.min.js"></script>
+			<!-- Datatable -->
+			<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+
+			<div class="customLoading"></div>
+</body>
+
+</html>

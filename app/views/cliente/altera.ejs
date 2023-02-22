@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        <%=app_name%>
+    </title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Page level plugin CSS-->
+    <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <!-- Toast -->
+	<link href="/toastr/toastr.min.css" rel="stylesheet" />
+    <!-- Ícone -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+    <% include ../comum/navbar %>
+
+        <div id="wrapper">
+            <div id="content-wrapper">
+                <div class="container-fluid">
+
+                    <!-- Page Content -->
+                    <div class="card">
+                        <div class="card-header">Alterar | Cliente</div>
+                        <div class="card-body">
+
+                            <div class="tab-content" id="nav-tabContent">
+
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover table-bordered table-sm gridClientes"
+                                        id="gridClientes" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Razão Social</th>
+                                                <th>CNPJ</th>
+                                                <th>Telefone 1</th>
+                                                <th>Telefone 2</th>
+                                                <th>Situação</th>
+                                                <th>Conta</th>
+                                                <th>Conexão BD</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div class="table-responsive">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <!-- Modal para alteração do Cliente -->
+            <div class="modal fade" id="modalAlterarCliente" tabindex="-1" role="dialog"
+                aria-labelledby="modalAlterarCliente" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Alterar Cliente </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-none">
+                                <div class="col-sm-12">
+                                    <input type="text" value="" class="form-control" id="cliente_id" name="cliente_id"
+                                        required>
+                                </div>
+                                <div class="col-sm-12">
+                                    <input type="text" value="" class="form-control" id="cnpj" name="cnpj"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="razao_social" class="col-sm-4 col-form-label">Razão Social:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="razao_social"
+                                        placeholder="Razão Social" name="razao_social">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="endereco" class="col-sm-4 col-form-label">Endereço:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="endereco"
+                                        placeholder="Endereço" name="endereco">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="numero_residencia" class="col-sm-4 col-form-label">N°:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="numero_residencia" 
+                                    placeholder="N°" name="numero_residencia">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bairro" class="col-sm-4 col-form-label">Bairro:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="bairro" 
+                                    placeholder="Bairro" name="bairro">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cidade" class="col-sm-4 col-form-label">Cidade:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="cidade" 
+                                    placeholder="Cidade" name="cidade">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="estado" class="col-sm-4 col-form-label">UF:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="estado" 
+                                    placeholder="Estado" name="estado">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cep" class="col-sm-4 col-form-label">CEP:</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="cep" 
+                                    placeholder="CEP" name="cep">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="telefone_contato1" class="col-sm-4 col-form-label">Telefone 1:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="telefone_contato1" 
+                                    placeholder="Telefone Contato 1" name="telefone_contato1">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="telefone_contato2" class="col-sm-4 col-form-label">Telefone 2:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="telefone_contato2" 
+                                    placeholder="Telefone Contato 2" name="telefone_contato2">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="conta" class="col-sm-4 col-form-label">Conta:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="conta" 
+                                    placeholder="Conta Acesso" name="conta">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="connection" class="col-sm-4 col-form-label">Conexão:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="connection" 
+                                    placeholder="Conexão BD" name="connection">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="situacao" class="col-sm-4 col-form-label">Situação:</label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="situacao" name="situacao" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="reserva_estoque" class="col-sm-4 col-form-label">Reserva Estoque:</label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="reserva_estoque" name="reserva_estoque" required>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button id="btn-salvar-alteracao" type="button" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% include ../comum/footer %>
+        </div>
+        <!-- /.content-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+        <% include ../comum/logout %>
+            <!-- Bootstrap core JavaScript-->
+            <script src="/vendor/jquery/jquery.min.js"></script>
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="/js/sb-admin.min.js"></script>
+            <!-- Toastr -->
+            <script src="/toastr/toastr.min.js"></script>
+            <!-- Datatable -->
+            <script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+            <script>
+                $(document).ready(() => {
+                    // Definições do Toastr
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right"
+                    }
+                    $.fn.dataTable.ext.errMode = 'none';
+
+                    var grid_clientes = $('#gridClientes').DataTable({
+                        "stateSave": false,
+                        "searching": true,
+                        "ordering": false,
+                        "paging": true,
+                        "info": true,
+                        "autoWidth": true,
+                        "language": {
+                            "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                        },
+                        "processing": false,
+                        "serverSide": false,
+                        "ajax": {
+                            "dataType": 'json',
+                            "contentType": "application/json; charset=UTF-8",
+                            "url": "/listar/clientes",
+                            "type": 'GET'
+                        },
+                        "columns": [{
+                            "data": "RAZAO_SOCIAL"
+                        }, {
+                            "data": "CNPJ"
+                        }, {
+                            "data": "TELEFONE_CONTATO1"
+                        }, {
+                            "data": "TELEFONE_CONTATO2"
+                        }, {
+                            "data": "SITUACAO_DESC"
+                        }, {
+                            "data": "CONTA"
+                        }, {
+                            "data": "CONNECTION"
+                        }, {
+                            "targets": -1,
+                            "data": null,
+                            "defaultContent": ` <div class="row">
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnAlterarDadosCliente'>
+                                                        <i class="far fa-edit fa-1x" style="color:#3399FF"></i>
+                                                    </div>
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnExcluirCliente'>
+														<i class="fas fa-trash-alt fa-1x" style="color:#FF0000"></i>
+													</div>
+                                                </div>`
+                        }]
+                    });
+
+                    $('#gridClientes tbody').on('click', '#btnAlterarDadosCliente', function () {
+                        var querySituacao = '', queryReservaEstoque = '';
+                        var data = grid_clientes.row($(this).parents('tr')).data();
+
+                        $("#situacao").html("");
+                        $("#cliente_id").val(data.ID_CLIENTE);
+                        $("#razao_social").val(data.RAZAO_SOCIAL);
+                        $("#cnpj").val(data.CNPJ);
+                        $("#endereco").val(data.ENDERECO);
+                        $("#numero_residencia").val(data.NUMERO_RESIDENCIA);
+                        $("#bairro").val(data.BAIRRO);
+                        $("#cidade").val(data.CIDADE);
+                        $("#estado").val(data.ESTADO);
+                        $("#cep").val(data.CEP);
+                        $("#telefone_contato1").val(data.TELEFONE_CONTATO1);
+                        $("#telefone_contato2").val(data.TELEFONE_CONTATO2);
+                        $("#conta").val(data.CONTA);
+                        $("#connection").val(data.CONNECTION);
+
+                        switch (data.SITUACAO) {
+                            case 'A':
+                                querySituacao = `
+									<option value="">Selecione...</option>
+									<option value="A" selected>ATIVO</option>
+									<option value="I">INATIVO</option>`;
+                                break;
+                            case 'I':
+                                querySituacao = `
+									<option value="">Selecione...</option>
+									<option value="A">ATIVO</option>
+									<option value="I" selected>INATIVO</option>`;
+                                break;
+                            default:
+                                querySituacao = `
+									<option value="" selected>Selecione...</option>
+									<option value="A">ATIVO</option>
+									<option value="I">INATIVO</option>`;
+                                break;
+                        }
+
+                        switch (data.RESERVA_ESTOQUE) {
+                            case 'S':
+                                queryReservaEstoque = `
+									<option value="">Selecione...</option>
+									<option value="S" selected>SIM</option>
+									<option value="N">NÃO</option>`;
+                                break;
+                            case 'N':
+                                queryReservaEstoque = `
+                                    <option value="">Selecione...</option>
+									<option value="S">SIM</option>
+									<option value="N" selected>NÃO</option>`;
+                                break;
+                            default:
+                                queryReservaEstoque = `
+                                    <option value="" selected>Selecione...</option>
+									<option value="S">SIM</option>
+									<option value="N">NÃO</option>`;
+                                break;
+                        }
+
+                        $("#situacao").append(querySituacao);
+                        $("#reserva_estoque").append(queryReservaEstoque);
+
+                        $('#modalAlterarCliente').modal('show');
+                    });
+
+                    $('#btn-salvar-alteracao').click(() => {
+                        var params = {
+                            "id_cliente": $("#cliente_id").val(),
+                            "razao_social": $("#razao_social").val(),
+                            "cnpj": $("#cnpj").val(),
+                            "endereco": $("#endereco").val(),
+                            "numero_residencia": $("#numero_residencia").val(),
+                            "bairro": $("#bairro").val(),
+                            "cidade": $("#cidade").val(),
+                            "estado": $("#estado").val(),
+                            "cep": $("#cep").val(),
+                            "telefone_contato1": $("#telefone_contato1").val(),
+                            "telefone_contato2": $("#telefone_contato2").val(),
+                            "conta": $("#conta").val(),
+                            "connection": $("#connection").val(),
+                            "situacao": $("#situacao").val(),
+                            "reserva_estoque": $("#reserva_estoque").val()
+                        }
+                        
+                        $.ajax({
+                            url: "/alterar/dados/cliente",
+                            type: 'patch',
+                            data: params,
+                            dataType: "json",
+                            beforeSend: (data) => {
+                                $("body").addClass("loading");
+                            }
+                        })
+                            .done((msg) => {
+                                $("body").removeClass("loading");
+                                if (msg.tipo == "success") {
+                                    $('#modalAlterarCliente').modal('hide');
+                                    grid_clientes.ajax.reload();
+                                    toastr.success(msg.message, "Sucesso");
+                                } else {
+                                    toastr.warning(`Falha ao alterar cliente.<br>` + msg.message, "Falha");
+                                }
+                            })
+                            .fail((request, textStatus, errorThrown) => {
+                                let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+                                toastr.error("Erro.<br>" + msg, "Falha");
+                            })
+                            .always(() => {
+                                $("body").removeClass("loading");
+                            });
+                    })
+                    
+                    $('#gridClientes tbody').on('click', '#btnExcluirCliente', function () {
+                        var data = grid_clientes.row($(this).parents('tr')).data();
+
+                        $.ajax({
+							url: "/excluir/cliente" + data.ID_CLIENTE,
+							type: 'delete',
+							beforeSend: (data) => {
+								$("body").addClass("loading");
+							}
+						})
+							.done((msg) => {
+								$("body").removeClass("loading");
+								if (msg.tipo == "success") {
+									grid_clientes.ajax.reload();
+									toastr.success(msg.message, "Sucesso");
+								} else {
+									toastr.warning(`Falha ao excluir o Cliente.<br>` + msg.message, "Falha");
+								}
+							})
+							.fail((request, textStatus, errorThrown) => {
+								console.log(request.responseJSON);
+								toastr.error("Erro.<br>" + request.responseJSON, "Falha");
+							})
+							.always(() => {
+								$("body").removeClass("loading");
+							});
+                    });
+                });
+            </script>
+            <div class="customLoading"></div>
+</body>
+
+</html>

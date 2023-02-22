@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+	<!-- Select2 -->
+	<link href="/public/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<!-- Page Content -->
+					<div class="card">
+						<div class="card-header">Cadastrar | Produto</div>
+						<div class="card-body">
+
+							<div class="tab-content" id="nav-tabContent">
+
+								<form method="POST" action="/cadastrar/produto">
+									<div class="form-group row">
+										<label for="descricao" class="col-sm-2 col-form-label">Descrição: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="descricao"
+												placeholder="Descrição" name="descricao" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="descricao_complementar" class="col-sm-2 col-form-label">Descrição Complementar: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="descricao_complementar"
+												placeholder="Descrição Complementar" name="descricao_complementar">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="preco" class="col-sm-2 col-form-label">Preço: </label>
+										<div class="col-sm-10">
+											<input type="number" class="form-control" id="preco"
+												placeholder="Preço" name="preco" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="saldo_estoque" class="col-sm-2 col-form-label">Saldo Inicial: </label>
+										<div class="col-sm-10">
+											<input type="number" class="form-control" id="saldo_estoque"
+												placeholder="Saldo Inicial" name="saldo_estoque" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="estoque_minimo" class="col-sm-2 col-form-label">Saldo Minimo: </label>
+										<div class="col-sm-10">
+											<input type="number" class="form-control" id="estoque_minimo"
+												placeholder="Estoque Minimo" name="estoque_minimo" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="categoria_id" class="col-sm-2 col-form-label">Categoria: </label>
+										<div class="col-sm-10">
+											<select class="custom-select my-1 mr-sm-2" id="categoria_id" name="categoria_id" required>
+												<option selected>Selecione...</option>
+												<%for(let x= 0; x < recordsCategorias.length; x++){%>
+													<option value="<%=recordsCategorias[x].ID_CATEGORIA%>">
+														<%=recordsCategorias[x].NOME%>
+													</option>
+												<%}%>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="embalagens" class="col-sm-2 col-form-label">Embalagens:</label>
+										<div class="col-sm-10">
+											<select class="form-control js-example-basic-multiple" name="embalagens[]" multiple="multiple">
+												<%for(let x= 0; x < recordsEmbalagens.length; x++){%>
+													<option value="<%=recordsEmbalagens[x].ID_EMBALAGEM%>">
+														<%=recordsEmbalagens[x].SIGLA%>
+													</option>
+												<%}%>
+											  </select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="fabricante_id" class="col-sm-2 col-form-label">Fabricante:</label>
+										<div class="col-sm-10">
+											<select class="custom-select my-1 mr-sm-2" id="fabricante_id" name="fabricante_id" required>
+												<option selected>Selecione...</option>
+												<%for(let x= 0; x < recordsFabricantes.length; x++){%>
+													<option value="<%=recordsFabricantes[x].ID_FABRICANTE%>">
+														<%=recordsFabricantes[x].NOME%>
+													</option>
+												<%}%>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="fornecedor_id" class="col-sm-2 col-form-label">Fornecedor:</label>
+										<div class="col-sm-10">
+											<select class="custom-select my-1 mr-sm-2" id="fornecedor_id" name="fornecedor_id" required>
+												<option selected>Selecione...</option>
+												<%for(let x= 0; x < recordsFornecedores.length; x++){%>
+													<option value="<%=recordsFornecedores[x].ID_FORNECEDOR%>">
+														<%=recordsFornecedores[x].NOME_FANTASIA%>
+													</option>
+												<%}%>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="situacao" class="col-sm-2 col-form-label">Situação:</label>
+										<div class="col-sm-10">
+												<select class="custom-select my-1 mr-sm-2" id="situacao" name="situacao" required>
+													<option value="" selected>Selecione...</option>
+													<option value="A">ATIVO</option>
+													<option value="I">INATIVO</option>
+												</select>
+										</div>
+									</div>						
+									<button class="btn btn-primary" type="submit">Salvar</button>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+
+			<% include ../comum/footer %>
+		</div>
+		<!-- /.content-wrapper -->
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+		<!-- Bootstrap core JavaScript-->
+		<script src="/vendor/jquery/jquery.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="/js/sb-admin.min.js"></script>
+		<!-- Toastr -->
+		<script src="/toastr/toastr.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<!-- Select2 -->
+		<script src="/public/select2/dist/js/select2.min.js"></script>
+		<!-- Datatable -->
+		<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+		<div class="customLoading"></div>
+
+		<script>
+			$(document).ready(() => {
+				$('.js-example-basic-multiple').select2();
+			});
+		</script>
+</body>
+
+</html>

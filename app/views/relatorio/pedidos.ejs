@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Select2 -->
+	<link href="/public/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+                        <div class="col-sm-12">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Filtros
+                                </div>
+                                <div class="card-body">
+                                    <form>                                        
+                                        <div class="form-group row">
+                                            <label for="data_inicio" class="col-sm-2 col-form-label">Data Inicial: </label>
+                                            <div class="col-sm-3">
+                                                <input type="date" class="form-control" id="data_inicio" name="data_inicio">
+                                            </div>
+                                            <label for="data_fim" class="col-sm-2 col-form-label">Data Final: </label>
+                                            <div class="col-sm-3">
+                                                <input type="date" class="form-control" id="data_fim" name="data_fim">
+                                            </div>
+                                            <button type="button" class="btn btn-primary col-sm-2 col-form-label" id="btn-filtrar-pedidos">Buscar <i class="fas fa-file-invoice-dollar"></i></button>
+                                        </div>                           
+                                    </form>
+                                </div class="card-body">
+                            </div class="card">
+        
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Pedidos
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered table-sm gridPedidos"
+                                        id="gridPedidos" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Razão Social</th>
+                                                <th>CPF | CNPJ</th>
+                                                <th>Desconto</th>
+                                                <th>Valor Total</th>
+                                                <th>Data Efetivação</th>
+                                            </tr>
+                                        </thead>
+                                        <div id="dados_total" style="text-align: right;">Total Pedido: </div>
+                                    </table>
+                                    </div class="table-responsive">
+                                </div class="card-body">
+                            </div class="card">
+        
+                        </div class="col-sm-12">
+                    </div class="row">
+				</div>
+                <!-- /.container-fluid -->
+			</div>
+		    <!-- /.content-wrapper -->
+			<% include ../comum/footer %>
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+		<!-- Bootstrap core JavaScript-->
+		<script src="/vendor/jquery/jquery.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="/js/sb-admin.min.js"></script>
+		<!-- Toastr -->
+		<script src="/toastr/toastr.min.js"></script>
+        <!-- Axios -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- Select2 -->
+		<script src="/public/select2/dist/js/select2.min.js"></script>
+		<!-- Datatable -->
+		<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                // Definições do Toastr
+                toastr.options = {
+                    "closeButton": true,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right"
+                }
+
+                $.fn.dataTable.ext.errMode = 'none';
+
+                var grid_pedidos = $('#gridPedidos').DataTable({
+                    "stateSave": false,
+                    "searching": false,
+                    "ordering": false,
+                    "paging": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "select": true,
+                    "language": {
+                        "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                    },
+                    "processing": false,
+                    "serverSide": false,
+                    "ajax": {
+                        "dataType": 'json',
+                        "contentType": "application/json; charset=UTF-8",
+                        "url": '/api/array_vazio',
+                        "type": 'GET'
+                    },
+                    "columns": [{
+                        "data": "RAZAO_SOCIAL", 
+                        "render": function (data, type, row) {
+						    if(!data){
+                                 return 'NÃO DECLARADO'
+                            } else {
+                                return data
+                            }
+					    }
+                    }, {
+                        "data": "CNPJ",
+                        "render": function (data, type, row) {
+						    if(!data){
+                                 return '000.000.000-00'
+                            } else {
+                                return data
+                            }
+					    }
+                    }, {
+                        "data": "VALOR_TOTAL_DESCONTO",
+                        "render": function (data, type, row) {
+						    return data.toLocaleString('pt-BR', {
+						    	"style": "decimal",
+						    	"minimumFractionDigits": 2,
+						    	"maximumFractionDigits": 2
+						    });
+                        }
+                    }, {
+                        "data": "VALOR_TOTAL",
+                        "render": function (data, type, row) {
+                            return data.toLocaleString('pt-BR', {
+                                "style": "decimal",
+                                "minimumFractionDigits": 2,
+                                "maximumFractionDigits": 2
+                            });
+					    }
+                    }, {
+                        "data": "DATA_PEDIDO",
+                        "render": function (data, type, row) {
+						    var dateSplit = data.substring(0, 10).split('-');
+						    return dateSplit[2] + '/' + dateSplit[1] + '/' + dateSplit[0];
+					    }
+                    }]
+                });
+
+                grid_pedidos.on('xhr', function (e, settings, json) {
+                    if (json) {                   
+                        let totalPedido = 0.0;
+
+                        for (let i = 0; i < json.data.length; i++) {
+                            totalPedido += parseFloat(json.data[i].VALOR_TOTAL);
+
+                        }
+                        totalPedido = totalPedido.toFixed(2);
+                        $("#valor_total").remove();
+                        $("#dados_total").append(`<a id="valor_total" style="color: green; font-weight: bold;" >` + totalPedido + `<a/>`);
+                    }
+                });
+                
+                grid_pedidos.on('error', (e, settings, techNote, message) => {
+                    toastr.error("Falha ao carregar os dados para a tabela.<br>" + message, "Falha");
+                });
+
+                grid_pedidos.on('select', (e, dt, type, indexes) => {
+                    if (type === 'row') {
+                        window.open('/relatorio/pedido/' + grid_pedidos.rows('.selected').data()[0].ID_PEDIDO);
+                    };
+                });
+
+                $("#btn-filtrar-pedidos").click((event) => {
+                    let data_inicial = $("#data_inicio").val();
+                    let data_final = $("#data_fim").val();
+
+                    if(data_inicial && data_final){
+                        let data_inicio = data_inicial.split('-');
+                        let data_fim = data_final.split('-');
+
+                        data_inicial = new Date(data_inicial).setHours(0, 0, 0, 0);
+                        data_final = new Date(data_final).setHours(0, 0, 0, 0);
+                        
+                        if(new Date(data_inicial) <= new Date(data_final)) {
+                            // Busca os pedidos passando data inicio e fim como parametro.
+                            grid_pedidos.ajax.url("/busca/pedido/between/" + $("#data_inicio").val() + "/" + $("#data_fim").val()).load();
+                        }else{
+                            toastr.error("Data Inicial não pode ser maior que Data Final.<br>", "Falha");
+                        }
+                    }
+                })
+            });
+        </script>
+		<div class="customLoading"></div>
+</body>
+
+</html>

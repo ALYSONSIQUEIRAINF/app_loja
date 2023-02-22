@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        <%=app_name%>
+    </title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Page level plugin CSS-->
+    <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <!-- Toast -->
+	<link href="/toastr/toastr.min.css" rel="stylesheet" />
+    <!-- Ícone -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+    <% include ../comum/navbar %>
+
+        <div id="wrapper">
+            <div id="content-wrapper">
+                <div class="container-fluid">
+
+                    <!-- Page Content -->
+                    <div class="card">
+                        <div class="card-header">Alterar | Produto</div>
+                        <div class="card-body">
+
+                            <div class="tab-content" id="nav-tabContent">
+
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover table-bordered table-sm gridProdutos"
+                                        id="gridProdutos" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Categoria</th>
+                                                <th>Embalagem</th>
+                                                <th>Fabricante</th>
+                                                <th>Saldo</th>
+                                                <th>Fornecedor</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div class="table-responsive">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <!-- Modal para alteração do Produto -->
+            <div class="modal fade" id="modalAlterarProduto" tabindex="-1" role="dialog"
+                aria-labelledby="modalAlterarProduto" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Alterar Produto </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-none">
+                                <div class="col-sm-12">
+                                    <input type="text" value="" class="form-control" id="id_produto" name="id_produto"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descricao" class="col-sm-4 col-form-label">Descrição: </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="descricao"
+                                        placeholder="Descrição" name="descricao">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descricao_complementar" class="col-sm-4 col-form-label">Descrição Complementar: </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="descricao_complementar"
+                                        placeholder="Descrição Complementar" name="descricao_complementar">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="preco" class="col-sm-4 col-form-label">Preço: </label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="preco" 
+                                    placeholder="Preço" name="preco">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="categoria_id" class="col-sm-4 col-form-label">Categoria: </label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="categoria_id" name="categoria_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="embalagem_id" class="col-sm-4 col-form-label">Embalagem: </label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="embalagem_id" name="embalagem_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="fabricante_id" class="col-sm-4 col-form-label">Fabricante: </label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="fabricante_id" name="fabricante_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="fornecedor_id" class="col-sm-4 col-form-label">Fornecedor: </label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="fornecedor_id" name="fornecedor_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="situacao" class="col-sm-4 col-form-label">Situação: </label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select my-1 mr-sm-2" id="situacao" name="situacao" required>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button id="btn-salvar-alteracao" type="button" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% include ../comum/footer %>
+        </div>
+        <!-- /.content-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+        <% include ../comum/logout %>
+            <!-- Bootstrap core JavaScript-->
+            <script src="/vendor/jquery/jquery.min.js"></script>
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="/js/sb-admin.min.js"></script>
+            <!-- Toastr -->
+            <script src="/toastr/toastr.min.js"></script>
+            <!-- Datatable -->
+            <script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+            <div id="recordsCategorias" class="d-none"><%=JSON.stringify(recordsCategorias)%></div>
+            <div id="recordsEmbalagens" class="d-none"><%=JSON.stringify(recordsEmbalagens)%></div>
+            <div id="recordsFabricantes" class="d-none"><%=JSON.stringify(recordsFabricantes)%></div>
+            <div id="recordsFornecedores" class="d-none"><%=JSON.stringify(recordsFornecedores)%></div>
+            <script>
+                $(document).ready(() => {
+                    // Definições do Toastr
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right"
+                    }
+                    $.fn.dataTable.ext.errMode = 'none';
+
+                    var categorias = $("#recordsCategorias").html();
+                    var embalagens = $("#recordsEmbalagens").html();
+                    var fabricantes = $("#recordsFabricantes").html();
+                    var fornecedores = $("#recordsFornecedores").html();
+
+                    var grid_produtos = $('#gridProdutos').DataTable({
+                        "stateSave": false,
+                        "searching": true,
+                        "ordering": false,
+                        "paging": true,
+                        "info": true,
+                        "autoWidth": true,
+                        "language": {
+                            "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                        },
+                        "processing": false,
+                        "serverSide": false,
+                        "ajax": {
+                            "dataType": 'json',
+                            "contentType": "application/json; charset=UTF-8",
+                            "url": "/listar/produtos",
+                            "type": 'GET'
+                        },
+                        "columns": [{
+                            "data": "DESCRICAO"
+                        }, {
+                            "data": "PRECO"
+                        }, {
+                            "data": "NOME_CATEGORIA"
+                        }, {
+                            "data": "SIGLA"
+                        }, {
+                            "data": "NOME_FABRICANTE"
+                        }, {
+                            "data": "SALDO_ESTOQUE"
+                        }, {
+                            "data": "FORNECEDOR"
+                        }, {
+                            "targets": -1,
+                            "data": null,
+                            "defaultContent": ` <div class="row">
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnAlterarDadosProduto'>
+                                                        <i class="far fa-edit fa-1x" style="color:#3399FF"></i>
+                                                    </div>
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnExcluirProduto'>
+														<i class="fas fa-trash-alt fa-1x" style="color:#FF0000"></i>
+													</div>
+                                                </div>`
+                        }]
+                    });
+
+                    $('#gridProdutos tbody').on('click', '#btnAlterarDadosProduto', function () {
+                        var queryCategoria, queryEmbalagem, queryFabricante, queryFornecedor, querySituacao;
+                        var arrayCategorias = [], arrayEmbalagens = [], arrayFabricantes = [], arrayFornecedores = [];
+
+                        var data = grid_produtos.row($(this).parents('tr')).data();
+
+                        $("#categoria_id").html("");
+                        $("#embalagem_id").html("");
+                        $("#fabricante_id").html("");
+                        $("#fornecedor_id").html("");
+                        $("#situacao").html("");
+
+                        $("#id_produto").val(data.ID_PRODUTO);
+                        $("#descricao").val(data.DESCRICAO);
+                        $("#descricao_complementar").val(data.DESCRICAO_COMPLEMENTAR);
+                        $("#preco").val(data.PRECO);
+                        
+                        // Categorias
+                        arrayCategorias = JSON.parse(categorias);
+                        for (let idxCategoria = 0; idxCategoria < arrayCategorias.length; idxCategoria++) {
+                            const categoria = arrayCategorias[idxCategoria];
+
+                            if(data.CATEGORIA_ID == categoria.ID_CATEGORIA){
+                                queryCategoria += `<option value="${categoria.ID_CATEGORIA}" selected>
+														${categoria.NOME}
+													</option>`;
+                            } else {
+                                queryCategoria += `<option value="${categoria.ID_CATEGORIA}">
+														${categoria.NOME}
+													</option>`
+                            }
+                        }
+                        $("#categoria_id").append(queryCategoria);
+
+                        // Embalagens
+                        arrayEmbalagens = JSON.parse(embalagens);
+                        for (let idxEmbalagem = 0; idxEmbalagem < arrayEmbalagens.length; idxEmbalagem++) {
+                            const embalagem = arrayEmbalagens[idxEmbalagem];
+                            
+                            if(data.EMBALAGEM_ID == embalagem.ID_EMBALAGEM){
+                                queryEmbalagem += `<option value="${embalagem.ID_EMBALAGEM}" selected>
+														${embalagem.SIGLA}
+													</option>`;
+                            } else {
+                                queryEmbalagem += `<option value="${embalagem.ID_EMBALAGEM}">
+														${embalagem.SIGLA}
+													</option>`
+                            }
+                        }
+                        $("#embalagem_id").append(queryEmbalagem);
+
+                        // Fabricante
+                        arrayFabricantes = JSON.parse(fabricantes);
+                        for (let idxFabricante = 0; idxFabricante < arrayFabricantes.length; idxFabricante++) {
+                            const fabricante = arrayFabricantes[idxFabricante];
+
+                            if(data.FABRICANTE_ID == fabricante.ID_FABRICANTE){
+                                queryFabricante += `<option value="${fabricante.ID_FABRICANTE}" selected>
+														${fabricante.NOME}
+													</option>`;
+                            } else {
+                                queryFabricante += `<option value="${fabricante.ID_FABRICANTE}">
+														${fabricante.NOME}
+													</option>`
+                            }
+                        }
+                        $("#fabricante_id").append(queryFabricante);
+
+                        // Fornecedor
+                        arrayFornecedores = JSON.parse(fornecedores);
+                        for (let idxFornecedor = 0; idxFornecedor < arrayFornecedores.length; idxFornecedor++) {
+                            const fornecedor = arrayFornecedores[idxFornecedor];
+
+                            if(data.FORNECEDOR_ID == fornecedor.ID_FORNECEDOR){
+                                queryFornecedor += `<option value="${fornecedor.ID_FORNECEDOR}" selected>
+														${fornecedor.NOME_FANTASIA}
+													</option>`;
+                            } else {
+                                queryFornecedor += `<option value="${fornecedor.ID_FORNECEDOR}">
+														${fornecedor.NOME_FANTASIA}
+													</option>`
+                            }
+                        }
+                        $("#fornecedor_id").append(queryFornecedor);
+
+                        switch (data.SITUACAO) {
+                            case 'A':
+                                querySituacao = `
+									<option value="">Selecione...</option>
+									<option value="A" selected>ATIVO</option>
+									<option value="I">INATIVO</option>`;
+                                break;
+                            case 'I':
+                                querySituacao = `
+									<option value="">Selecione...</option>
+									<option value="A">ATIVO</option>
+									<option value="I" selected>INATIVO</option>`;
+                                break;
+                            default:
+                                querySituacao = `
+									<option value="" selected>Selecione...</option>
+									<option value="A">ATIVO</option>
+									<option value="I">INATIVO</option>`;
+                                break;
+                        }
+
+                        $("#situacao").append(querySituacao);
+
+                        $('#modalAlterarProduto').modal('show');
+                    });
+
+                    $('#btn-salvar-alteracao').click(() => {
+                        var params = {
+                            "id_produto": $("#id_produto").val(),
+                            "descricao": $("#descricao").val(),
+                            "descricao_complementar": $("#descricao_complementar").val(),
+                            "preco": $("#preco").val(),
+                            "categoria_id": $("#categoria_id").val(),
+                            "embalagem_id": $("#embalagem_id").val(),
+                            "fabricante_id": $("#fabricante_id").val(),
+                            "fornecedor_id": $("#fornecedor_id").val(),
+                            "situacao": $("#situacao").val()
+                        }
+                        
+                        $.ajax({
+                            url: "/alterar/dados/produto",
+                            type: 'patch',
+                            data: params,
+                            dataType: "json",
+                            beforeSend: (data) => {
+                                $("body").addClass("loading");
+                            }
+                        })
+                            .done((msg) => {
+                                $("body").removeClass("loading");
+                                if (msg.tipo == "success") {
+                                    $('#modalAlterarProduto').modal('hide');
+                                    grid_produtos.ajax.reload();
+                                    toastr.success(msg.message, "Sucesso");
+                                } else {
+                                    toastr.warning(`Falha ao alterar o Produto.<br>` + msg.message, "Falha");
+                                }
+                            })
+                            .fail((request, textStatus, errorThrown) => {
+                                let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+                                toastr.error("Erro.<br>" + msg, "Falha");
+                            })
+                            .always(() => {
+                                $("body").removeClass("loading");
+                            });
+                    })
+                    
+                    $('#gridProdutos tbody').on('click', '#btnExcluirProduto', function () {
+                        var data = grid_produtos.row($(this).parents('tr')).data();
+
+                        $.ajax({
+							url: "/excluir/produto" + data.ID_PRODUTO,
+							type: 'delete',
+							beforeSend: (data) => {
+								$("body").addClass("loading");
+							}
+						})
+							.done((msg) => {
+								$("body").removeClass("loading");
+								if (msg.tipo == "success") {
+									grid_produtos.ajax.reload();
+									toastr.success(msg.message, "Sucesso");
+								} else {
+									toastr.warning(`Falha ao excluir o Produto.<br>` + msg.message, "Falha");
+								}
+							})
+							.fail((request, textStatus, errorThrown) => {
+								console.log(request.responseJSON);
+								toastr.error("Erro.<br>" + request.responseJSON, "Falha");
+							})
+							.always(() => {
+								$("body").removeClass("loading");
+							});
+                    });
+                });
+            </script>
+            <div class="customLoading"></div>
+</body>
+
+</html>

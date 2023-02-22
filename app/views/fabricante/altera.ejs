@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        <%=app_name%>
+    </title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Page level plugin CSS-->
+    <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <!-- Toast -->
+	<link href="/toastr/toastr.min.css" rel="stylesheet" />
+    <!-- Ícone -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+    <% include ../comum/navbar %>
+
+        <div id="wrapper">
+            <div id="content-wrapper">
+                <div class="container-fluid">
+
+                    <!-- Page Content -->
+                    <div class="card">
+                        <div class="card-header">Alterar | Fabricante</div>
+                        <div class="card-body">
+
+                            <div class="tab-content" id="nav-tabContent">
+
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover table-bordered table-sm gridFabricantes"
+                                        id="gridFabricantes" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div class="table-responsive">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <!-- Modal para alteração do Fabricante -->
+            <div class="modal fade" id="modalAlterarFabricante" tabindex="-1" role="dialog"
+                aria-labelledby="modalAlterarFabricante" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Alterar Fabricante </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-none">
+                                <div class="col-sm-12">
+                                    <input type="number" value="" class="form-control" id="fabricante_id" name="fabricante_id"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="nome" class="col-sm-4 col-form-label">Nome: </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="nome"
+                                        placeholder="Nome" name="nome">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button id="btn-salvar-alteracao" type="button" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% include ../comum/footer %>
+        </div>
+        <!-- /.content-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+        <% include ../comum/logout %>
+            <!-- Bootstrap core JavaScript-->
+            <script src="/vendor/jquery/jquery.min.js"></script>
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="/js/sb-admin.min.js"></script>
+            <!-- Toastr -->
+            <script src="/toastr/toastr.min.js"></script>
+            <!-- Datatable -->
+            <script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+            <script>
+                $(document).ready(() => {
+                    // Definições do Toastr
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right"
+                    }
+                    $.fn.dataTable.ext.errMode = 'none';
+
+                    var grid_fabricantes = $('#gridFabricantes').DataTable({
+                        "stateSave": false,
+                        "searching": true,
+                        "ordering": false,
+                        "paging": true,
+                        "info": true,
+                        "autoWidth": true,
+                        "language": {
+                            "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                        },
+                        "processing": false,
+                        "serverSide": false,
+                        "ajax": {
+                            "dataType": 'json',
+                            "contentType": "application/json; charset=UTF-8",
+                            "url": "/listar/fabricantes",
+                            "type": 'GET'
+                        },
+                        "columns": [{
+                            "data": "NOME"
+                        }, {
+                            "targets": -1,
+                            "data": null,
+                            "defaultContent": ` <div class="row">
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnAlterarDadosFabricante'>
+                                                        <i class="far fa-edit fa-1x" style="color:#3399FF"></i>
+                                                    </div>
+                                                    <div class="col-sm-6" style='cursor:pointer' id='btnExcluirFabricante'>
+														<i class="fas fa-trash-alt fa-1x" style="color:#FF0000"></i>
+													</div>
+                                                </div>`,
+                            "width": "5%"
+                        }]
+                    });
+
+                    $('#gridFabricantes tbody').on('click', '#btnAlterarDadosFabricante', function () {
+                        var data = grid_fabricantes.row($(this).parents('tr')).data();
+
+                        $("#fabricante_id").val(data.ID_FABRICANTE);
+                        $("#nome").val(data.NOME);
+
+                        $('#modalAlterarFabricante').modal('show');
+                    });
+
+                    $('#btn-salvar-alteracao').click(() => {
+                        var params = {
+                            "id_fabricante": $("#fabricante_id").val(),
+                            "nome": $("#nome").val()
+                        }
+                        
+                        $.ajax({
+                            url: "/alterar/dados/fabricante",
+                            type: 'patch',
+                            data: params,
+                            dataType: "json",
+                            beforeSend: (data) => {
+                                $("body").addClass("loading");
+                            }
+                        })
+                            .done((msg) => {
+                                $("body").removeClass("loading");
+                                if (msg.tipo == "success") {
+                                    $('#modalAlterarFabricante').modal('hide');
+                                    grid_fabricantes.ajax.reload();
+                                    toastr.success(msg.message, "Sucesso");
+                                } else {
+                                    toastr.warning(`Falha ao alterar Fabricante.<br>` + msg.message, "Falha");
+                                }
+                            })
+                            .fail((request, textStatus, errorThrown) => {
+                                let msg = request.responseJSON && request.responseJSON.message || JSON.stringify(request.responseJSON);
+                                toastr.error("Erro.<br>" + msg, "Falha");
+                            })
+                            .always(() => {
+                                $("body").removeClass("loading");
+                            });
+                    })
+                    
+                    $('#gridFabricantes tbody').on('click', '#btnExcluirFabricante', function () {
+                        var data = grid_fabricantes.row($(this).parents('tr')).data();
+
+                        $.ajax({
+							url: "/excluir/fabricante/" + data.ID_FABRICANTE,
+							type: 'delete',
+							beforeSend: (data) => {
+								$("body").addClass("loading");
+							}
+						})
+							.done((msg) => {
+								$("body").removeClass("loading");
+								if (msg.tipo == "success") {
+									grid_fabricantes.ajax.reload();
+									toastr.success(msg.message, "Sucesso");
+								} else {
+									toastr.warning(`Falha ao excluir Fabricante.<br>` + msg.message, "Falha");
+								}
+							})
+							.fail((request, textStatus, errorThrown) => {
+								console.log(request.responseJSON);
+								toastr.error("Erro.<br>" + request.responseJSON, "Falha");
+							})
+							.always(() => {
+								$("body").removeClass("loading");
+							});
+                    });
+                });
+            </script>
+            <div class="customLoading"></div>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Select2 -->
+	<link href="/public/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+                        <div class="col-sm-12">        
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Produtos | Pedido
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered table-sm gridProdutos"
+                                        id="gridProdutos" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Preço Base</th>
+                                                <th>Preço Venda</th>
+                                                <th>Quantidade</th>
+                                                <th>Embalagem</th>
+                                                <th>Valor Total</th>
+                                                <th>Fornecedor</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    </div class="table-responsive">
+                                </div class="card-body">
+                            </div class="card">
+        
+                        </div class="col-sm-12">
+                    </div class="row">
+				</div>
+                <!-- /.container-fluid -->
+			</div>
+		    <!-- /.content-wrapper -->
+			<% include ../comum/footer %>
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+		<!-- Bootstrap core JavaScript-->
+		<script src="/vendor/jquery/jquery.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="/js/sb-admin.min.js"></script>
+		<!-- Toastr -->
+		<script src="/toastr/toastr.min.js"></script>
+        <!-- Axios -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- Select2 -->
+		<script src="/public/select2/dist/js/select2.min.js"></script>
+		<!-- Datatable -->
+		<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                // Definições do Toastr
+                toastr.options = {
+                    "closeButton": true,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right"
+                }
+
+                $.fn.dataTable.ext.errMode = 'none';
+
+                var grid_produtos = $('#gridProdutos').DataTable({
+                    "stateSave": false,
+                    "searching": false,
+                    "ordering": false,
+                    "paging": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "select": true,
+                    "language": {
+                        "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                    },
+                    "processing": false,
+                    "serverSide": false,
+                    "ajax": {
+                        "dataType": 'json',
+                        "contentType": "application/json; charset=UTF-8",
+                        "url": '/busca/itens/pedido/' + 32,
+                        "type": 'GET'
+                    },
+                    "columns": [{
+                        "data": "DESCRICAO"
+                    }, {
+                        "data": "PRECO"
+                    }, {
+                        "data": "VALOR_UNITARIO"
+                    }, {
+                        "data": "QUANTIDADE"
+                    }, {
+                        "data": "SIGLA"
+                    }, {
+                        "data": "VALOR_TOTAL"
+                    }, {
+                        "data": "NOME_FANTASIA"
+                    }]
+                });
+                
+                grid_produtos.on('error', (e, settings, techNote, message) => {
+                    toastr.error("Falha ao carregar os dados para a tabela.<br>" + message, "Falha");
+                });
+            });
+        </script>
+		<div class="customLoading"></div>
+</body>
+
+</html>

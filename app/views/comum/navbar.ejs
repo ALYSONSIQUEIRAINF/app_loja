@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
+
+    <a class="navbar-brand mb-0 h1" href="#">
+            <%=app_name%>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home<i class='fas fa-house-user'></i></a>
+            </li>
+            <%if(tipo == 'A'){%>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Cliente
+                <i class='far fa-user-circle'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/cadastrar/cliente">Cadastrar <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/cliente">Alterar <i class="far fa-edit"></i> </a>
+                </div>
+            </li>
+            <%}%>
+            <%if(tipo == 'C'){%>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Produto
+                <i class='fas fa-umbrella-beach'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/cadastrar/produto">Produto <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/produto">Produto <i class="far fa-edit"></i></a>
+                    <a class="dropdown-item" href="/cadastrar/embalagem">Embalagem <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/embalagem">Embalagem <i class="far fa-edit"></i></a>
+                    <a class="dropdown-item" href="/cadastrar/categoria">Categoria <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/categoria">Categoria <i class="far fa-edit"></i></a>
+                    <a class="dropdown-item" href="/cadastrar/fabricante">Fabricante <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/fabricante">Fabricante <i class="far fa-edit"></i></a>
+                    <a class="dropdown-item" href="/alterar/estoque">Alimentar Estoque <i class="far fa-edit"></i></a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Fornecedor
+                    <i class='fas fa-handshake'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/cadastrar/fornecedor">Fornecedor <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/fornecedor">Fornecedor <i class="far fa-edit"></i></a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Venda
+                <i class='fas fa-donate'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/cadastrar/pedido">Vender <i class="fas fa-plus"></i></a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Relatórios
+                <i class='fas fa-chart-line'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/relatorio/pedidos">Pedidos <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/relatorio/produto/comprar">Produtos a Comprar <i class="far fa-edit"></i> </a>
+                </div>
+            </li>
+            <%}%>
+            <%if(tipo == 'A'){%>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Sistema
+                <i class='fas fa-wrench'></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/cadastrar/usuario">Criar Usuário <i class="fas fa-plus"></i></a>
+                    <a class="dropdown-item" href="/alterar/usuario">Alterar Usuário <i class="far fa-edit"></i> </a>
+                </div>
+            </li>
+            <%}%>     
+        </ul>
+        
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/logoff">
+                    <span>Sair</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</nav>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+	<!-- Custom styles for this template-->
+	<link href="/css/sb-admin.css" rel="stylesheet" />
+	<!-- Toast -->
+	<link href="/toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+
+<body class="bg-dark">
+
+	<div class="container">
+		<div class="row backgroundimg mx-auto">
+			<div class="col-sm-12 my-auto">
+
+				<div class="card card-login mx-auto">
+					<div class="card-header text-center"><b>Login</b></div>
+					<div class="card-body">
+						<form method="POST" action="/login">
+							<div class="form-group">
+								<div class="form-label-group">
+									<input type="text" id="conta" name="conta" class="form-control"
+										placeholder="Conta de Acesso" required autofocus />
+									<label for="conta">Conta</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="form-label-group">
+									<input type="text" id="usuario" name="usuario" class="form-control"
+										placeholder="Usuário de rede ou email" required autofocus />
+									<label for="usuario">Usuário</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="form-label-group">
+									<input type="password" id="senha" name="senha" class="form-control"
+										placeholder="Senha" required value="" />
+									<label for="senha">Senha</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" value="remember-me">
+										Lembrar
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-block">
+									Login
+								</button>
+							</div>
+
+							<!-- Alerts -->
+							<div class="resposta"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="container">-->
+	</div>
+	<!--<div class="row backgroundimg mx-auto">-->
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="/vendor/jquery/jquery.min.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="/js/sb-admin.min.js"></script>
+
+	<!-- Toastr -->
+	<script src="/toastr/toastr.min.js"></script>
+
+	<script>
+		$("form").submit((event) => {
+			event.preventDefault();
+			var params = $("form").serializeArray();
+
+			$.ajax({
+				url: "/login",
+				type: 'post',
+				data: params,
+				dataType: "text",
+				beforeSend: () => {
+					$("body").addClass("loading");
+				}
+			})
+				.done((msg) => {
+					location.replace("/")
+				})
+				.fail((request, textStatus, errorThrown) => {
+					toastr.options = {
+						"closeButton": true,
+						"newestOnTop": true,
+						"progressBar": true,
+						"positionClass": "toast-top-right"
+					}
+					toastr.error(request.responseText, "Falha no login");
+				})
+				.always(() => {
+					$("body").removeClass("loading");
+				});
+		});
+	</script>
+	<div class="customLoading"></div>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- Select2 -->
+	<link href="/public/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+                        <div class="col-sm-12">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Filtros
+                                </div>
+                                <div class="card-body">
+                                    <form>                                        
+                                        <div class="form-group row">
+                                            <label for="data_inicio" class="col-sm-2 col-form-label">Tipo Relatorio: </label>
+                                            <div class="col-sm-10">
+                                                <select class="custom-select my-1 mr-sm-2" id="select-tipo-relatorio">
+                                                    <option value="" selected>Selecione..</option>
+                                                    <option value="1">Produtos abaixo da margem</option>
+                                                    <option value="2">Produtos vendidos nos últimos..</option>
+                                                    <option value="3">Todos</option>
+                                                    <option value="4">Fabricante especifico</option>
+                                                    <option value="5">Fornecedor especifico</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row d-none" id="div_quantidade_dias">
+                                            <label for="quantidade_dias" class="col-sm-2 col-form-label"> Qtde Dias: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="quantidade_dias"
+                                                    placeholder="dias" name="quantidade_dias">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row d-none" id="div_codigo_fornecedor">
+                                            <label for="codigo_fornecedor" class="col-sm-2 col-form-label"> Fornecedor: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="codigo_fornecedor"
+                                                    placeholder="código fornecedor" name="codigo_fornecedor">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row d-none" id="div_codigo_fabricante">
+                                            <label for="codigo_fabricante" class="col-sm-2 col-form-label"> Fabricante: </label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" id="codigo_fabricante"
+                                                    placeholder="código fabricante" name="codigo_fabricante">
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary" type="button" id="btn-gerar-relatorio" disabled>Buscar</button>                       
+                                    </form>
+                                </div class="card-body">
+                            </div class="card">       
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Relatório
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered table-sm gridProdutos"
+                                        id="gridProdutos" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Incidências</th>
+                                                <th>Descrição</th>
+                                                <th>Saldo</th>
+                                                <th>Saldo Minímo</th>
+                                                <th>Fornecedor</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    </div class="table-responsive">
+                                </div class="card-body">
+                            </div class="card">
+        
+                        </div class="col-sm-12">
+                    </div class="row">
+				</div>
+                <!-- /.container-fluid -->
+			</div>
+		    <!-- /.content-wrapper -->
+			<% include ../comum/footer %>
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+		<!-- Bootstrap core JavaScript-->
+		<script src="/vendor/jquery/jquery.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="/js/sb-admin.min.js"></script>
+		<!-- Toastr -->
+		<script src="/toastr/toastr.min.js"></script>
+        <!-- Axios -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- Select2 -->
+		<script src="/public/select2/dist/js/select2.min.js"></script>
+		<!-- Datatable -->
+		<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                // Definições do Toastr
+                toastr.options = {
+                    "closeButton": true,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right"
+                }
+
+                $.fn.dataTable.ext.errMode = 'none';
+
+                var grid_produtos = $('#gridProdutos').DataTable({
+                    "stateSave": false,
+                    "searching": false,
+                    "ordering": false,
+                    "paging": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "select": true,
+                    "language": {
+                        "url": "/DataTables_Translate/Portuguese-Brasil.json"
+                    },
+                    "processing": false,
+                    "serverSide": false,
+                    "ajax": {
+                        "dataType": 'json',
+                        "contentType": "application/json; charset=UTF-8",
+                        "url": '/api/array_vazio',
+                        "type": 'GET'
+                    },
+                    "columns": [{
+                        "data": "QTDE_VENDIDA"
+                    }, {
+                        "data": "DESCRICAO"
+                    }, {
+                        "data": "SALDO"
+                    }, {
+                        "data": "SALDO_MINIMO"
+                    }, {
+                        "data": "FORNECEDOR"
+                    }]
+                });
+                
+                grid_produtos.on('error', (e, settings, techNote, message) => {
+                    toastr.error("Falha ao carregar os dados para a tabela.<br>" + message, "Falha");
+                });
+
+                $("#select-tipo-relatorio").change((e) => {
+                    const tipo_rel = $("#select-tipo-relatorio").val();
+                    if(tipo_rel){
+                        $("#btn-gerar-relatorio").removeAttr('disabled');
+
+                        if(tipo_rel == 2) {
+                            $("#div_quantidade_dias").removeClass('d-none');
+                            $("#div_codigo_fabricante").addClass('d-none');
+                            $("#codigo_fabricante").val("");
+                            $("#div_codigo_fornecedor").addClass('d-none');
+                            $("#codigo_fornecedor").val("");
+                        }else if(tipo_rel == 4) {
+                            $("#div_codigo_fabricante").removeClass('d-none');
+                            $("#div_quantidade_dias").addClass('d-none');
+                            $("#quantidade_dias").val("");
+                            $("#div_codigo_fornecedor").addClass('d-none');
+                            $("#codigo_fornecedor").val("");
+                        }else if(tipo_rel == 5) {
+                            $("#div_codigo_fornecedor").removeClass('d-none');
+                            $("#div_quantidade_dias").addClass('d-none');
+                            $("#quantidade_dias").val("");
+                            $("#div_codigo_fabricante").addClass('d-none');
+                            $("#codigo_fabricante").val("");
+                        }else{
+                            $("#div_quantidade_dias").addClass('d-none');
+                            $("#quantidade_dias").val("");
+                            $("#div_codigo_fabricante").addClass('d-none');
+                            $("#codigo_fabricante").val("");
+                            $("#div_codigo_fornecedor").addClass('d-none');
+                            $("#codigo_fornecedor").val("");
+                        }
+                    }else{
+                        $("#btn-gerar-relatorio").attr('disabled',true);
+                        $("#div_quantidade_dias").addClass('d-none');
+                        $("#quantidade_dias").val("");
+                        $("#div_codigo_fabricante").addClass('d-none');
+                        $("#codigo_fabricante").val("");
+                        $("#div_codigo_fornecedor").addClass('d-none');
+                        $("#codigo_fornecedor").val("");
+                    }
+                    
+                })
+            
+                $("#btn-gerar-relatorio").click((event) => {
+                    if($("#select-tipo-relatorio").val()){
+                        var dados = $("#quantidade_dias").val() || $("#codigo_fabricante").val() || $("#codigo_fornecedor").val() || 0;
+                        
+                        grid_produtos.ajax.url('/gerar/relatorio/produto/' + $("#select-tipo-relatorio").val() + '/' + dados).load();
+                    }
+                })
+            });
+        </script>
+		<div class="customLoading"></div>
+</body>
+
+</html>

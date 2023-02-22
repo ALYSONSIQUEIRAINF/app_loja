@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>
+		<%=app_name%>
+	</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="/../css/sb-admin.css" rel="stylesheet">
+
+	<!-- Toast -->
+	<link href="/../toastr/toastr.min.css" rel="stylesheet" />
+
+	<!-- Ícone -->
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+
+	<!-- Datatable -->
+	<link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css" />
+
+	<link rel="stylesheet" type="text/css" href="/DataTables/Buttons-1.5.2/css/buttons.bootstrap.min.css" />
+</head>
+
+<body id="page-top">
+	<% include ../comum/navbar %>
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<!-- Page Content -->
+					<div class="card">
+						<div class="card-header">Cadastrar | Fornecedor</div>
+						<div class="card-body">
+
+							<div class="tab-content" id="nav-tabContent">
+
+								<form method="POST" action="/cadastrar/fornecedor">
+									<div class="form-group row">
+										<label for="nome_fantasia" class="col-sm-2 col-form-label">Nome Fantasia:</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="nome_fantasia"
+												placeholder="Nome Fantasia" name="nome_fantasia" required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="razao_social" class="col-sm-2 col-form-label">Razão Social: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="razao_social"
+												placeholder="Razão Social" name="razao_social" required>
+										</div>
+									</div>
+                                    <div class="form-group row">
+										<label for="nome_contato" class="col-sm-2 col-form-label">Contato: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="nome_contato"
+												placeholder="Nome Contato" name="nome_contato">
+										</div>
+									</div>
+                                    <div class="form-group row">
+										<label for="email_contato" class="col-sm-2 col-form-label">E-mail: </label>
+										<div class="col-sm-10">
+											<input type="email" class="form-control" id="email_contato"
+												placeholder="E-mail Contato" name="email_contato">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="cnpj" class="col-sm-2 col-form-label">CPF/CNPJ: </label>
+										<div class="col-sm-10">
+											<input type="number" class="form-control" id="cnpj"
+												placeholder="CPF / CNPJ" name="cnpj">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="telefone_contato1" class="col-sm-2 col-form-label">Telefone 1: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="telefone_contato1"
+												placeholder="Telefone Contato 1" name="telefone_contato1">
+										</div>
+									</div>
+                                    <div class="form-group row">
+										<label for="telefone_contato2" class="col-sm-2 col-form-label">Telefone 2: </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="telefone_contato2"
+												placeholder="Telefone Contato 2" name="telefone_contato2">
+										</div>
+									</div>					
+									<button class="btn btn-primary" type="submit">Salvar</button>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+
+			<% include ../comum/footer %>
+		</div>
+		<!-- /.content-wrapper -->
+		</div>
+		<!-- /#wrapper -->
+		<% include ../comum/logout %>
+			<!-- Bootstrap core JavaScript-->
+			<script src="/vendor/jquery/jquery.min.js"></script>
+			<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+			<!-- Core plugin JavaScript-->
+			<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+			<script type="text/javascript" src="/js/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+			<!-- Custom scripts for all pages-->
+			<script src="/js/sb-admin.min.js"></script>
+			<!-- Toastr -->
+			<script src="/toastr/toastr.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+			<!-- Datatable -->
+			<script type="text/javascript" src="/DataTables/datatables.min.js"></script>
+
+			<div class="customLoading"></div>
+</body>
+
+</html>
